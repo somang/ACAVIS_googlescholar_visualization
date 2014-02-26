@@ -1,8 +1,4 @@
 /*
-1. Axes and labels
-2. Infobox when hovered on tags
-3. 
-
 
 + scrollable, zoomable, colors...
 */
@@ -30,14 +26,18 @@ $(document).ready(function(){
   $.get('data.csv', function(data) {
     ds = $.csv.toObjects(data);
     oc = {};
+    // oc = {Year: [Paper, Word, MaxCite]}
     for (var i = 0 ; i < ds.length; i++){
         oc[ds[i].Year] === undefined ?
         oc[ds[i].Year] = {Papers:[ds[i]], Words: {}, MaxCite: 0} :
         oc[ds[i].Year].Papers.push(ds[i]);
     }
+    wc = {}; //wordcollection
+
+    // Put Words in each years
     for (key in oc){
-      for (var j = 0 ; j < oc[key].Papers.length; j++){
-        parseText(oc[key].Papers[j].Title);
+      for (var j = 0 ; j < oc[key].Papers.length; j++){// For Each Paper
+        parseText(oc[key].Papers[j].Title); // Parse Text, omit stopwords etc
         var ta = [];
         for (keywords in tags){ta.push(keywords);}
 
@@ -45,7 +45,11 @@ $(document).ready(function(){
           oc[key].MaxCite = oc[key].Papers[j].Cites;
         }
 
-        for (var k = 0; k < ta.length; k++){
+        for (var k = 0; k < ta.length; k++){ // For every words 
+          wc[ta[k]] === undefined ?
+          wc[ta[k]] = {Origin:[oc[key].Papers[j]]} :
+          wc[ta[k]].Origin.push(oc[key].Papers[j]);
+
           oc[key].Words[ta[k]] === undefined ?
           oc[key].Words[ta[k]] = {Count:1, Origin:[], Cites: oc[key].Papers[j].Cites} :
           oc[key].Words[ta[k]].Count = oc[key].Words[ta[k]].Count + 1
@@ -53,11 +57,13 @@ $(document).ready(function(){
             oc[key].Words[ta[k]].Cites = oc[key].Papers[j].Cites}
           oc[key].Words[ta[k]].Origin.push(oc[key].Papers[j].Title);
         }
+
+
       }
-    } 
+    }
     var bar;
     for (years in oc){
-      //var years = 2012;
+      //Draw Each bars
       if (years > 1982){
       bar = [];
       for (keywords in oc[years].Words){
@@ -101,7 +107,19 @@ $(document).ready(function(){
         fontFamily: 'Helvetica, sans-serif',
         //fontWeight: 500, //'bold',
         hover: function(item) {
-          $('.infobox').text(item[0]);
+          var t = "";
+          //console.log(wc[item[0]].Origin[0]);
+
+          for (i = 0; i<wc[item[0]].Origin.length; i++){
+            t = t + "Authors : " + wc[item[0]].Origin[i]["Authors"] + "\n" +
+                  "Title : " + wc[item[0]].Origin[i]["Title"] + "\n" +
+                  "Year : " + wc[item[0]].Origin[i]["Year"] + "\n" +
+                  "Cites : " + wc[item[0]].Origin[i]["Cites"] + "\n"
+                  ;
+          }
+
+          $('.infobox').text(t);
+
         },
         weightFactor: 10,
         origin: [($thisBar.width() / 2), ($thisBar.height() * 0)],
@@ -125,22 +143,6 @@ $(document).ready(function(){
       */
     };
   };
-
-  // .yaxis {
-  //   position: absolute;
-  //   bottom: 50px;
-  //   left: 30px;
-  //   width: 50px; 
-  //   height: 1250px;
-  //   border-right: solid #CCCCCC;
-  // }
-  // .xaxis {
-  //   position: absolute;
-  //   left:50px; 
-  //   width: 1900px; 
-  //   bottom: 80px;
-  //   border-top: solid #CCCCCC;
-  // }
 
   }, 'text');
 });

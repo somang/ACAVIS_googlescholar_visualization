@@ -3,29 +3,32 @@
     height:200px;
 } 
 .infobox {
-        position: absolute;
-        width: 200px;
-        padding: 20px;
-        background-color: rgba(255,255,255,.75);
+    position: absolute;
+    top: 300px;
+    right: 200px;
+    width: 300px;
+    padding: 20px;
+    background-color: rgba(253, 208, 162, 0.3);
+    border:1px solid;
+    border-radius:10px;
 }
- 
+
 body {
     background-color: white;
     color: black;
 }
-p {
-    font-size: 12px;
-    line-height: 14px;
-    color: black;
-}
 
-.axis path,
-.axis line {
-    fill: none;
-    stroke: black;
-}
+.yaxis {
+position: absolute;
+bottom: 50px;
+width: 50px; 
+height: 1250px;
+border-left: solid #CCCCCC;
 
-.axis text {
-    font-family: sans-serif;
-    font-size: 20px;
+}
+.xaxis {
+position: absolute;
+width: 2000px; 
+bottom: 80px;
+border-top: solid #CCCCCC;
 }
