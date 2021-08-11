@@ -11,7 +11,7 @@ var category20b = ['#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca2
 var category20c = ['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#756bb1', '#9e9ac8', '#bcbddc', '#dadaeb', '#636363', '#969696', '#bdbdbd', '#d9d9d9'];
 
 // From Jonathan Feinberg's cue.language, see lib/cue.language/license.txt.
-var stopWords = /^(i|b|c|d|e|f|g|h|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall)$/,
+var stopWords = /^([0-9]*|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall)$/,
     punctuation = /[!"'&()*+,-\.\/:;<=>?\[\\\]^`\{|\}~]+/g,
     wordSeparators = /[\s\u3031-\u3035\u309b\u309c\u30a0\u30fc\uff70]+/g,
     discard = /^(@|https?:)/,
@@ -32,6 +32,13 @@ $(document).ready(function(){
         oc[ds[i].Year] = {Papers:[ds[i]], Words: {}, MaxCite: 0} :
         oc[ds[i].Year].Papers.push(ds[i]);
     }
+    console.log(oc);
+    
+    // sort the array. 
+    numbers = Object.keys(oc).sort(function(a,b){ return a-b; });
+    // pick up the first number.
+    firstYear = numbers.slice(0,1);
+
     wc = {}; //wordcollection
 
     // Put Words in each years
@@ -57,23 +64,21 @@ $(document).ready(function(){
             oc[key].Words[ta[k]].Cites = oc[key].Papers[j].Cites}
           oc[key].Words[ta[k]].Origin.push(oc[key].Papers[j].Title);
         }
-
-
       }
     }
     var bar;
-    for (years in oc){
-      //Draw Each bars
-      if (years > 1982){
+    var index = 0;
+    for (years in oc){ //Draw Each bars
+      if (years > firstYear){
       bar = [];
       for (keywords in oc[years].Words){
         var wordelement = [];
         wordelement.push(keywords);
-        wordelement.push(oc[years].Words[keywords].Count);//oc[years].Words[keywords].Cites);
+        wordelement.push(oc[years].Words[keywords].Count); //oc[years].Words[keywords].Cites);
         bar.push(wordelement);
       }
-      var index = years - 1982;
-
+      index += 1;
+      console.log(years, index);
       var $thisBar = $('<canvas id="year' + years + '" width="50" height="' + Math.log(oc[years].MaxCite) * 100 +'"></canvas>');
       $('body').append($thisBar);
       $thisBar.css({
@@ -98,7 +103,7 @@ $(document).ready(function(){
       
       WordCloud( $thisBar[0], {
         list : bar,
-        gridSize: 5,
+        gridSize: 1,
         color: function(){
           i = Math.floor((Math.random()*20)+1);
           return category20[i];
@@ -108,8 +113,7 @@ $(document).ready(function(){
         //fontWeight: 500, //'bold',
         hover: function(item) {
           var t = "";
-          //console.log(wc[item[0]].Origin[0]);
-
+          // console.log(wc[item[0]].Origin[0]);
           for (i = 0; i<wc[item[0]].Origin.length; i++){
             t = t + "Authors : " + wc[item[0]].Origin[i]["Authors"] + "\n" +
                   "Title : " + wc[item[0]].Origin[i]["Title"] + "\n" +
@@ -117,14 +121,13 @@ $(document).ready(function(){
                   "Cites : " + wc[item[0]].Origin[i]["Cites"] + "\n"
                   ;
           }
-
           $('.infobox').text(t);
-
         },
         weightFactor: 10,
         origin: [($thisBar.width() / 2), ($thisBar.height() * 0)],
         rotateRatio:0,
-        shape: 'diamond'
+        shape: 'square',
+        ellipticity: 20
       });
       
       // sleeps until it stops.
