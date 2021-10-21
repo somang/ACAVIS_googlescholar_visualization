@@ -1,0 +1,38 @@
+.wordcloud {
+    width: 100px;
+    height: 10px;
+}
+
+#infobox {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    width: 50%;
+    height: 30%;
+    padding: 20px;
+    background-color: rgba(253, 208, 162, 0.3);
+    border: 1px solid;
+    border-radius: 10px;
+    z-index: 5;
+    overflow-y: scroll;
+}
+
+body {
+    background-color: white;
+    color: black;
+}
+
+.yaxis {
+    position: absolute;
+    bottom: 50px;
+    width: 50px;
+    height: 1250px;
+    border-left: solid #CCCCCC;
+}
+
+.xaxis {
+    position: absolute;
+    width: 3500px;
+    bottom: 80px;
+    border-top: solid #CCCCCC;
+}

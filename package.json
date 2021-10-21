@@ -1,0 +1,22 @@
+{
+  "name": "acavis_googlescholar_visualization",
+  "version": "1.0.0",
+  "description": "This is javascript visualization for the academic information.\r The data needs to be imported from external source, tested on the google scholar crawler www.harzing.com",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/somang/ACAVIS_googlescholar_visualization.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/somang/ACAVIS_googlescholar_visualization/issues"
+  },
+  "homepage": "https://github.com/somang/ACAVIS_googlescholar_visualization#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
