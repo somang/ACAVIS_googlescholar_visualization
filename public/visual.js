@@ -17,11 +17,28 @@ var dataset;
 var oc;
 
 $(function() {
+    // Make the DIV element draggable:
+    dragElement(document.getElementById("infobox"));
+
     // $(document).on('mousemove', function(e){
     //   $('#infobox').css({
     //      left:  e.pageX
     //   });
     // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $.get('data.csv', function(data) {
         ds = $.csv.toObjects(data);
         oc = {};
@@ -97,7 +114,7 @@ $(function() {
 
                 var thisBarBG = $thisBar[0].getContext("2d").createLinearGradient(0, 0, 0, 800);
                 thisBarBG.addColorStop(0.5, "white");
-                thisBarBG.addColorStop(1, "#fdd0a2");
+                thisBarBG.addColorStop(1, "#FAF9F6");
 
                 WordCloud($thisBar[0], {
                     list: bar,
@@ -109,7 +126,7 @@ $(function() {
                     backgroundColor: thisBarBG,
                     fontFamily: 'Helvetica, sans-serif',
                     //fontWeight: 500, //'bold',
-                    hover: function(item) {
+                    click: function(item) {
                         var t = "";
                         // console.log(wc[item[0]].Origin[0]);
                         for (i = 0; i < wc[item[0]].Origin.length; i++) {
@@ -122,6 +139,7 @@ $(function() {
                     },
                     weightFactor: 10,
                     origin: [($thisBar.width() / 2), ($thisBar.height() * 1.1)],
+                    // origin: [($thisBar.width() / 2), ($thisBar.height() / 2)],
                     rotateRatio: 0,
                     shape: 'square',
                     ellipticity: 1
@@ -154,4 +172,42 @@ function parseText(text) {
         cases[word.toLowerCase()] = word;
         tags[word = word.toLowerCase()] = (tags[word] || 0) + 1;
     });
+}
+
+
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  // move the DIV from anywhere inside the DIV:
+  elmnt.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
 }
