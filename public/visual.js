@@ -48,7 +48,7 @@ $(function() {
                 oc[ds[i].Year] = { Papers: [ds[i]], Words: {}, MaxCite: 0 } :
                 oc[ds[i].Year].Papers.push(ds[i]);
         }
-        console.log(oc);
+        // console.log(oc);
 
         // sort the array. 
         numbers = Object.keys(oc).sort(function(a, b) { return a - b; });

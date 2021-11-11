@@ -3,6 +3,14 @@
     height: 10px;
 }
 
+#highlightDIV {
+    background: lightblue;
+    margin: 0 auto;
+    z-index: 10;
+    text-align: center;
+}
+
+
 #infobox {
     position: -webkit-sticky;
     position: sticky;

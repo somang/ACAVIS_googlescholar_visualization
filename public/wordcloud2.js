@@ -442,9 +442,19 @@ if (!window.clearImmediate) {
 
       settings.hover(info.item, info.dimension, evt)
     }
-
+    var prevCoord = {x:0, y:0, w:0, h:0};
     var wordcloudclick = function wordcloudclick (evt) {
       var info = getInfoGridFromMouseTouchEvent(evt)
+      console.log(info.dimension, evt);
+      // can i try drawing a rectangle around this?
+      var el = document.getElementById('highlightDIV');
+      el.style.position = "absolute";
+      el.style.left = evt.pageX + 'px';
+      el.style.top = evt.pageY + 'px';
+      el.style.width = info.dimension.w + 'px';
+      el.style.height = info.dimension.h + 'px';
+      el.innerText = info.item[0];
+
       if (!info) {
         return
       }
